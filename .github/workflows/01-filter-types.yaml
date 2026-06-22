@@ -27,3 +27,4 @@ jobs:
                 echo "Workflow triggered successfully"
                 echo "Event type $GITHUB_EVENT_NAME"
                 echo "Branch: $GITHUB_REF_NAME"
+                echo "Owner: $GITHUB_BRANCH_OWNER"
