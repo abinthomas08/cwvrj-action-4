@@ -1,0 +1,63 @@
+name: 02-expression variale context demo 
+
+on:
+    push:
+        branches:
+            - main
+            - feature/*
+env:
+    APPLICATION_NAME: payment-service
+    DEPLOYMENT_ENVIRONMENT: production
+    AWS_REGION: ap-south-1
+
+jobs:
+    demo-job:
+        runs-on: ubuntu-latest
+        
+        steps: 
+            - name: Print variables context and expression
+              run: | 
+                echo "================DEFAULT VARIABLES==============="
+                echo "Event Name: $GITHUB_EVENT_NAME"
+                echo "Branch name: $GITHUB_REF_NAME"
+                echo "Cmommit sha : $GITHUB_SHA"
+                echo "RUNNER os : $RUNNER_OS""
+
+                echo ""
+                echo "=============custom variables========"
+                echo "Application name $APPLICATION_NAME"
+                echo "Deployment environment $DEPLOYMENT_ENVIRONMENT"
+                echo "AWS REGION": $AWS_REGION"
+                
+                echo ""
+                echo "===============CONTEXT VALUES=========="
+                echo "repository :${{ github.repository }}"
+                echo "Actor : ${{ github.actor }}"
+                echo "Workflow: ${{ github.workflow }}"
+                echo "RUNNER os context ${{ runner.os }}"
+
+
+                echo ""
+                echo "=============context vs variables============"
+                echo "context ref : ${{ github.ref }}"
+                echo "variable ref : $GITHUB_REF"
+
+                echo ""
+
+                echo "========== expression evaluation=========="
+                echo "IS main branch: ${{ github.ref == 'refs/heads/main' }}"
+                echo "is feature branch : ${{ startsWith(github.ref_name,'feature/') }}"
+
+
+
+            - name: Demostrate feature branch condition 
+              
+              if: ${{ startsWith(github.ref_name, 'feature/') }}
+              run: | 
+               echo " feature branch detected successfully"
+            
+            - name: Demonstrate main branch condition
+              if: ${{ github.ref == 'refs/heads/main' }}
+              run: |
+                echo "Main branch deployment logic triggered"
+
